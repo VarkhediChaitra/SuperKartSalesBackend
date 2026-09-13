@@ -6,7 +6,9 @@ import os
 # Configure backend API URL
 # If running in Docker network, use container name (backend) + port
 # If running locally, use localhost + mapped port
-API_URL = os.getenv("BACKEND_URL", "http://localhost:8501/predict")
+predict_API_URL = os.getenv("BACKEND_URL", "http://localhost:8501/predict")
+batch_predict_API_URL = os.getenv("BACKEND_URL", "http://localhost:8501/batch_predict")
+
 
 # Sets the page layout to centred mode and adds a title
 st.set_page_config(page_title="SuperKart Sales Prediction Platform", layout="centered")
@@ -218,7 +220,7 @@ if st.button("⚡ Run Prediction", type="primary", use_container_width=True):
             try:
                 # API call to get prediction
                 response = requests.post(
-                    API_URL,
+                    predict_API_URL,
                     json=product_data,
                     headers={
                         "Content-Type": "application/json"
@@ -241,3 +243,23 @@ if st.button("⚡ Run Prediction", type="primary", use_container_width=True):
 
             except Exception as e:
                 st.error(f"❌ An error occurred: {str(e)}")
+
+
+if st.button("⚡ Run Batch Prediction", type="primary", use_container_width=True):
+    # Example batch data: duplicating product_data for testing
+    batch_data = [product_data, product_data]
+
+    response = requests.post(
+        batch_predict_API_URL,
+        json=batch_data,
+        headers={"Content-Type": "application/json"}
+    )
+
+    if response.status_code == 200:
+        results = response.json()["results"]
+        st.success("✅ Batch Prediction Complete!")
+        for r in results:
+            st.write(f"Input: {r['input']}, Predicted Sales: £{r['Sales']:.2f}")
+    else:
+        st.error(f"❌ Error in API request: {response.status_code}")
+
