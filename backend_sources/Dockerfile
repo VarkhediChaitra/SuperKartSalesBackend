@@ -1,1 +1,15 @@
-RlJPTSBweXRob246My45LXNsaW0KCiMgU2V0IHRoZSB3b3JraW5nIGRpcmVjdG9yeSBpbnNpZGUgdGhlIGNvbnRhaW5lcgpXT1JLRElSIC9hcHAKCiMgQ29weSBhbGwgZmlsZXMgZnJvbSB0aGUgY3VycmVudCBkaXJlY3RvcnkgdG8gdGhlIGNvbnRhaW5lcidzIHdvcmtpbmcgZGlyZWN0b3J5CkNPUFkgLiAuCgojIEluc3RhbGwgZGVwZW5kZW5jaWVzIGZyb20gdGhlIHJlcXVpcmVtZW50cyBmaWxlIHdpdGhvdXQgdXNpbmcgY2FjaGUgdG8gcmVkdWNlIGltYWdlIHNpemUKUlVOIHBpcCBpbnN0YWxsIC0tbm8tY2FjaGUtZGlyIC0tdXBncmFkZSAtciByZXF1aXJlbWVudHMudHh0CgojIERlZmluZSB0aGUgY29tbWFuZCB0byBzdGFydCB0aGUgYXBwbGljYXRpb24gdXNpbmcgR3VuaWNvcm4gd2l0aCA0IHdvcmtlciBwcm9jZXNzZXMKIyBgLXcgNGA6IFVzZXMgNCB3b3JrZXIgcHJvY2Vzc2VzIGZvciBoYW5kbGluZyByZXF1ZXN0cwojIGAtYiAwLjAuMC4wOjc4NjBgOiBCaW5kcyB0aGUgc2VydmVyIHRvIHBvcnQgNzg2MCBvbiBhbGwgbmV0d29yayBpbnRlcmZhY2VzCiMgYHN1cGVya2FydF9zYWxlc19hcHA6c3VwZXJrYXJ0X2FwaWA6IFJ1bnMgdGhlIEZsYXNrIGFwcApDTUQgWyJndW5pY29ybiIsICItdyIsICI0IiwgIi1iIiwgIjAuMC4wLjA6Nzg2MCIsICJzdXBlcmthcnRfc2FsZXNfYXBwOnN1cGVya2FydF9hcGkiXQo=
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy all files from the current directory to the container's working directory
+COPY . .
+
+# Install dependencies from the requirements file without using cache to reduce image size
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
+
+# Define the command to start the application using Gunicorn with 4 worker processes
+# `-w 4`: Uses 4 worker processes for handling requests
+# `-b 0.0.0.0:7860`: Binds the server to port 7860 on all network interfaces
+# `superkart_sales_app:superkart_api`: Runs the Flask app
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5801", "superkart_sales_app:superkart_api"]
