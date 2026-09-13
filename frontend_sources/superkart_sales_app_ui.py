@@ -1,6 +1,12 @@
 
 import streamlit as st
 import requests
+import os
+
+# Configure backend API URL
+# If running in Docker network, use container name (backend) + port
+# If running locally, use localhost + mapped port
+API_URL = os.getenv("BACKEND_URL", "http://localhost:8501/predict")
 
 # Sets the page layout to centred mode and adds a title
 st.set_page_config(page_title="SuperKart Sales Prediction Platform", layout="centered")
@@ -212,7 +218,7 @@ if st.button("⚡ Run Prediction", type="primary", use_container_width=True):
             try:
                 # API call to get prediction
                 response = requests.post(
-                    "",
+                    API_URL,
                     json=product_data,
                     headers={
                         "Content-Type": "application/json"
