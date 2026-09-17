@@ -6,8 +6,8 @@ import os
 # Configure backend API URL
 # If running in Docker network, use container name (backend) + port
 # If running locally, use localhost + mapped port
-predict_API_URL = os.getenv("BACKEND_URL", "http://localhost:8501/predict")
-batch_predict_API_URL = os.getenv("BACKEND_URL", "http://localhost:8501/batch_predict")
+predict_API_URL = os.getenv("BACKEND_URL", "http://localhost:7860/predict")
+batch_predict_API_URL = os.getenv("BACKEND_URL", "http://localhost:7860/batch_predict")
 
 
 # Sets the page layout to centred mode and adds a title
@@ -222,9 +222,8 @@ if st.button("⚡ Run Prediction", type="primary", use_container_width=True):
                 response = requests.post(
                     predict_API_URL,
                     json=product_data,
-                    headers={
-                        "Content-Type": "application/json"
-                    }
+                    headers=
+                        {"Content-Type": "application/json"}
                 )
 
                 if response.status_code == 200:
