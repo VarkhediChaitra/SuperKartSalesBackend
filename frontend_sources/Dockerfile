@@ -1,15 +1,1 @@
-# Use a minimal base image with Python 3.9 installed
-FROM python:3.13.5-slim
-
-# Set the working directory inside the container to /app
-WORKDIR /app
-
-# Copy all files from the current directory on the host to the container's /app directory
-COPY . .
-
-# Install Python dependencies listed in requirements.txt
-RUN pip3 install -r requirements.txt
-
-# Define the command to run the Streamlit app on port 8501 and make it accessible externally
-# option "server.enableXsrfProtection=false" is to disable XSRF protection
-CMD ["streamlit", "run", "superkart_sales_app_ui.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.enableXsrfProtection=false"]=
+CiMgVXNlIGEgbWluaW1hbCBiYXNlIGltYWdlIHdpdGggUHl0aG9uIDMuOSBpbnN0YWxsZWQKRlJPTSBweXRob246My4xMy41LXNsaW0KCiMgU2V0IHRoZSB3b3JraW5nIGRpcmVjdG9yeSBpbnNpZGUgdGhlIGNvbnRhaW5lciB0byAvYXBwCldPUktESVIgL2FwcAoKIyBDb3B5IGFsbCBmaWxlcyBmcm9tIHRoZSBjdXJyZW50IGRpcmVjdG9yeSBvbiB0aGUgaG9zdCB0byB0aGUgY29udGFpbmVyJ3MgL2FwcCBkaXJlY3RvcnkKQ09QWSAuIC4KCiMgSW5zdGFsbCBQeXRob24gZGVwZW5kZW5jaWVzIGxpc3RlZCBpbiByZXF1aXJlbWVudHMudHh0ClJVTiBwaXAzIGluc3RhbGwgLXIgcmVxdWlyZW1lbnRzLnR4dAoKIyBEZWZpbmUgdGhlIGNvbW1hbmQgdG8gcnVuIHRoZSBTdHJlYW1saXQgYXBwIG9uIHBvcnQgODUwMSBhbmQgbWFrZSBpdCBhY2Nlc3NpYmxlIGV4dGVybmFsbHkKIyBvcHRpb24gInNlcnZlci5lbmFibGVYc3JmUHJvdGVjdGlvbj1mYWxzZSIgaXMgdG8gZGlzYWJsZSBYU1JGIHByb3RlY3Rpb24KQ01EIFsic3RyZWFtbGl0IiwgInJ1biIsICJzdXBlcmthcnRfc2FsZXNfYXBwX3VpLnB5IiwgIi0tc2VydmVyLnBvcnQ9ODUwMSIsICItLXNlcnZlci5hZGRyZXNzPTAuMC4wLjAiLCAiLS1zZXJ2ZXIuZW5hYmxlWHNyZlByb3RlY3Rpb249ZmFsc2UiXQo=
