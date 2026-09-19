@@ -193,72 +193,41 @@ with col2:
 
 st.divider()
 
-# Button for running predictions
+import streamlit as st
+import requests
+
+# Helper function to build product_data from UI inputs
+def build_product_data():
+    return {
+        "Product_Weight": Product_Weight,
+        "Product_Sugar_Content": Product_Sugar_Content,
+        "Product_Allocated_Area": Product_Allocated_Area,
+        "Product_MRP": Product_MRP,
+        "Store_Size": Store_Size,
+        "Store_Location_City_Type": Store_Location_City_Type,
+        "Store_Type": Store_Type,
+        "Store_Age_Years": Store_Age_Years,
+        "Product_Type_Category": Product_Type_Category,
+        "Product_Id_char": Product_Id_char
+    }
+
+# Single prediction
 if st.button("⚡ Run Prediction", type="primary", use_container_width=True):
+    product_data = build_product_data()
+    try:
+        response = requests.post("http://localhost:7860/predict", json=product_data)
+        st.success(f"Prediction: {response.json()}")
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
 
-    if Product_Weight == 0.0:
-        st.warning("⚠️ Please enter a valid Product Weight")
-    elif Product_MRP == 0.0:
-        st.warning("⚠️ Please enter a valid Product MRP")
-    else:
-        # Prepare data dictionary for API request
-        product_data = {
-            "Product_Weight": Product_Weight,
-            "Product_Sugar_Content": Product_Sugar_Content,
-            "Product_Allocated_Area": Product_Allocated_Area,
-            "Product_MRP": Product_MRP,
-            "Store_Size": Store_Size,
-            "Store_Location_City_Type": Store_Location_City_Type,
-            "Store_Type": Store_Type,
-            "Store_Age_Years": Store_Age_Years,
-            "Product_Type_Category": Product_Type_Category,
-            "Product_Id_char": Product_Id_char
-        }
-
-        # Spinner to show animation during API call
-        with st.spinner("Running prediction..."):
-            try:
-                # API call to get prediction
-                response = requests.post(
-                    predict_API_URL,
-                    json=product_data,
-                    headers=
-                        {"Content-Type": "application/json"}
-                )
-
-                if response.status_code == 200:
-                    result = response.json()
-                    predicted_sales = result.get("Sales", 0)
-
-                    # Displays prediction results
-                    st.success("✅ Prediction Complete!")
-                    st.metric(
-                            label="Predicted Sales",
-                            value=f"£{predicted_sales:.2f}"
-                        )
-                else:
-                    # Error if API call fails
-                    st.error(f"❌ Error in API request: {response.status_code}")
-
-            except Exception as e:
-                st.error(f"❌ An error occurred: {str(e)}")
-
-
+# Batch prediction
 if st.button("⚡ Run Batch Prediction", type="primary", use_container_width=True):
-    # Example batch data: duplicating product_data for testing
-    batch_data = [product_data, product_data]
+    product_data = build_product_data()
+    batch_data = [product_data, product_data]  # you can expand this list with multiple entries
+    try:
+        response = requests.post("http://localhost:7860/predict", json=batch_data)
+        st.success(f"Batch Prediction: {response.json()}")
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
 
-    response = requests.post(
-        batch_predict_API_URL,
-        json=batch_data,
-        headers={"Content-Type": "application/json"}
-    )
-
-    if response.status_code == 200:
-        results = response.json()["results"]
-        st.success("✅ Batch Prediction Complete!")
-        for r in results:
-            st.write(f"Input: {r['input']}, Predicted Sales: £{r['Sales']:.2f}")
-    else:
-        st.error(f"❌ Error in API request: {response.status_code}")
 
