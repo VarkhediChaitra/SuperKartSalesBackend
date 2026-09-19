@@ -1,16 +1,13 @@
 FROM python:3.9-slim
 
-# Set the working directory inside the container
-WORKDIR /app
+# Set working directory inside the container
+WORKDIR /app/backend_sources
 
-# Copy all files from the current directory to the container's working directory
-COPY . .
+# Copy backend sources (Python files, requirements, model) into the container
+COPY backend_sources/ /app/backend_sources/
 
-# Install dependencies from the requirements file without using cache to reduce image size
+# Install dependencies
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
-# Define the command to start the application using Gunicorn with 4 worker processes
-# `-w 4`: Uses 4 worker processes for handling requests
-# `-b 0.0.0.0:7860`: Binds the server to port 7860 on all network interfaces
-# `superkart_sales_app:app`: Runs the Flask app
+# Run Gunicorn with 4 workers on port 7860
 CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:7860", "superkart_sales_app:app"]
