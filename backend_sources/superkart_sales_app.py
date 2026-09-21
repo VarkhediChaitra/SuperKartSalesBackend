@@ -8,9 +8,10 @@ app = Flask(__name__)
 
 # Load the model outside the request handler to avoid reloading it on every request
 # This assumes model_filename and backend_sources are defined elsewhere or passed in.
+
 model_filename = "forecast_superkart_sales_model.joblib"
-backend_sources = "/content/drive/MyDrive/Colab Notebooks/backend_sources" # Ensure this path is correct
-saved_model = joblib.load(os.path.join(backend_sources, model_filename))
+current_dir = os.path.dirname(__file__)   # auto-resolves to /app/backend_sources
+saved_model = joblib.load(os.path.join(current_dir, model_filename))
 
 # --- Single prediction endpoint ---
 @app.route("/predict", methods=["POST"])
