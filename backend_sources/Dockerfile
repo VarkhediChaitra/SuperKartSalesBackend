@@ -18,4 +18,3 @@ EXPOSE 7860
 # -b 0.0.0.0:7860 : bind to all interfaces on port 7860
 # superkart_sales_app:app : run the Flask app object named "app" in superkart_sales_app.py
 CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:7860", "superkart_sales_app:app"]
-==
