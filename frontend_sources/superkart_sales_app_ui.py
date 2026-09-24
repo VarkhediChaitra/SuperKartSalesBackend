@@ -225,7 +225,7 @@ if st.button("⚡ Run Batch Prediction", type="primary", use_container_width=Tru
     product_data = build_product_data()
     batch_data = [product_data, product_data]  # you can expand this list with multiple entries
     try:
-        response = requests.post("http://localhost:7860/predict", json=batch_data)
+        response = requests.post("http://localhost:7860/batch_predict", json=batch_data)
         st.success(f"Batch Prediction: {response.json()}")
     except Exception as e:
         st.error(f"An error occurred: {e}")
